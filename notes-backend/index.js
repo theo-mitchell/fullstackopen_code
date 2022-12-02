@@ -1,8 +1,9 @@
+const Note = require('./models/note');
 const express = require("express");
 const app = express();
-const cors = require('cors');
+const cors = require("cors");
 
-app.use(express.static('build'));
+app.use(express.static("build"));
 app.use(express.json());
 app.use(cors());
 
@@ -80,7 +81,9 @@ app.get("/api/notes/:id", (request, response) => {
 });
 
 app.get("/api/notes", (request, response) => {
-  response.json(notes);
+  Note.find({}).then((notes) => {
+    response.json(notes);
+  });
 });
 
 app.delete("/api/notes/:id", (request, response) => {
@@ -91,11 +94,11 @@ app.delete("/api/notes/:id", (request, response) => {
 });
 
 const unknownEndpoint = (request, response) => {
-  response.status(404).send({error: 'unknown endpoint'});
-}
+  response.status(404).send({ error: "unknown endpoint" });
+};
 app.use(unknownEndpoint);
 
-const PORT = process.env.PORT || 3001
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`)
+  console.log(`Server running on port ${PORT}`);
 });
