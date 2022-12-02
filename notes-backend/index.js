@@ -1,4 +1,4 @@
-const Note = require('./models/note');
+const Note = require("./models/note");
 const express = require("express");
 const app = express();
 const cors = require("cors");
@@ -53,16 +53,15 @@ app.post("/api/notes/", (request, response) => {
     });
   }
 
-  const note = {
+  const note = new Note({
     content: body.content,
     impotant: body.important || false,
     date: new Date(),
-    id: createId(),
-  };
+  });
 
-  notes = notes.concat(note);
-
-  response.json(note);
+  note.save().then((savedNote) => {
+    response.json(savedNote);
+  });
 });
 
 app.get("/", (request, response) => {
@@ -71,13 +70,13 @@ app.get("/", (request, response) => {
 
 app.get("/api/notes/:id", (request, response) => {
   const id = Number(request.params.id);
-  const note = notes.find((note) => note.id === id);
-
-  if (note) {
-    response.json(note);
-  } else {
-    response.status(404).end();
-  }
+  const note = Note.findById(id).then((note) => {
+    if (note) {
+      response.json(note);
+    } else {
+      response.status(404).end();
+    }
+  });
 });
 
 app.get("/api/notes", (request, response) => {
