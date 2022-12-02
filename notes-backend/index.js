@@ -70,13 +70,19 @@ app.get("/", (request, response) => {
 
 app.get("/api/notes/:id", (request, response) => {
   const id = Number(request.params.id);
-  const note = Note.findById(id).then((note) => {
-    if (note) {
-      response.json(note);
-    } else {
-      response.status(404).end();
-    }
-  });
+
+  Note.findById(id)
+    .then((note) => {
+      if (note) {
+        response.json(note);
+      } else {
+        response.status(404).end();
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+      response.status(400).send({ error: 'malformatted id' });
+    });
 });
 
 app.get("/api/notes", (request, response) => {
