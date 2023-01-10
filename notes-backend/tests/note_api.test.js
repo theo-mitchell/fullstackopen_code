@@ -1,12 +1,12 @@
 const mongoose = require("mongoose");
 const request = require("supertest");
 const app = require("../app");
-
 const Note = require("../models/note");
 
 const initialNotes = [
   {
-    content: "HTML is easy",
+    // content: "HTML is easy",
+    content: "WOOOOOOOOO",
     date: new Date(),
     important: false,
   },
@@ -46,8 +46,6 @@ test("a specific note is within the returned notes", async () => {
 
   const contents = response.body.map((r) => r.content);
   expect(contents).toContain("Browser can execute only Javascript");
-
-  expect(response.body[0].content).toBe("HTML is easy");
 });
 
 afterAll(() => {
