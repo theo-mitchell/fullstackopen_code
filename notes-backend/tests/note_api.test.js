@@ -4,7 +4,6 @@ const app = require("../app");
 const Note = require("../models/note");
 const api = request(app);
 const helper = require("../tests/test_helper");
-const note = require("../models/note");
 
 beforeEach(async () => {
   await Note.deleteMany({});
