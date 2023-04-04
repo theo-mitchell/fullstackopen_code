@@ -38,7 +38,25 @@ describe("when there is one user in the db", () => {
     expect(usernames).toContain(newUser.username);
   });
 
-//   test("creation fails with proper status code if username already exists", async () => {
-//     const
-//   });
+  test("creation fails with proper status code if username already exists", async () => {
+    const usersAtStart = await testHelper.usersInDb();
+
+    const newUser = {
+      username: "root",
+      name: "testerson",
+      password: "yeslawd",
+    };
+
+    const result = await api
+      .post("/api/users/")
+      .send(newUser)
+      .expect(400)
+      .expect("Content-Type", /application\/json/);
+
+    expect(result.body.error).toContain("expected `username` to be unique");
+
+    const usersAtEnd = await testHelper.usersInDb();
+
+    expect(usersAtEnd).toHaveLength(usersAtStart.length);
+  });
 });
